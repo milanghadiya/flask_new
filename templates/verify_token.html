@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <title>Verify Token</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Loader CSS */
+        .loader {
+            display: none;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 20px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="loader"></div>
+    <div class="container">
+        <h2>Verify Token</h2>
+        <form method="post" action="{{ url_for('verify_token') }}" onsubmit="showLoader()">
+            <div class="form-group">
+                <label for="token">Token</label>
+                <input type="text" class="form-control" id="token" name="token" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <script>
+        function showLoader() {
+            document.querySelector('.loader').style.display = 'block';
+            document.querySelector('.overlay').style.display = 'block';
+        }
+
+        function hideLoader() {
+            document.querySelector('.loader').style.display = 'none';
+            document.querySelector('.overlay').style.display = 'none';
+        }
+
+        hideLoader();  // Hide the loader when the token verification screen is loaded
+    </script>
+</body>
+{% endblock %}

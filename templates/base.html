@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <title>Library Management System</title> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"> -->
+    <style>
+        /* CSS for Toastr */
+        #toastr-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        /* Toastr message styles */
+        .toast {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            margin: 0 0 6px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 0 6px rgba(0,0,0,0.15);
+            transition: all 0.3s ease-out;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .toast.toast-success {
+            border-color: #5cb85c;
+            background-color: #dff0d8;
+        }
+
+        .toast.toast-error {
+            border-color: #d9534f;
+            background-color: #f2dede;
+        }
+
+        .toast.toast-info {
+            border-color: #5bc0de;
+            background-color: #d9edf7;
+        }
+
+        .toast.toast-warning {
+            border-color: #f0ad4e;
+            background-color: #fcf8e3;
+        }
+
+        .toast-message {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content" >
+        <div id="toastr-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="toast toast-{{ category }}">
+                            <p class="toast-message">{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        // Function to remove toast after 3 seconds
+        function removeToasts() {
+            setTimeout(function() {
+                var toasts = document.querySelectorAll('.toast');
+                toasts.forEach(function(toast) {
+                    toast.style.opacity = '0';
+                    setTimeout(function() {
+                        toast.remove();
+                    }, 300); // Matches the CSS transition duration
+                });
+            }, 3000); // 3 seconds
+        }
+
+        // Execute the function to remove toasts after the page is loaded
+        document.addEventListener('DOMContentLoaded', removeToasts);
+    </script>
+
+<style>
+    /* Loader CSS */
+    .loader {
+        display: none;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 20px;
+        height: 20px;
+        animation: spin 2s linear infinite;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+</style>
+</head>
+<body>
+<!-- ... other body content ... -->
+
+<!-- Loader and overlay -->
+<div class="overlay"></div>
+<div class="loader"></div>
+
+<!-- ... scripts ... -->
+<script>
+    function showLoader() {
+        document.querySelector('.loader').style.display = 'block';
+        document.querySelector('.overlay').style.display = 'block';
+    }
+
+    function hideLoader() {
+        document.querySelector('.loader').style.display = 'none';
+        document.querySelector('.overlay').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

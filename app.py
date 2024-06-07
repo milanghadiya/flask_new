@@ -204,4 +204,4 @@ def reset_password_step2():
     return render_template('reset_password_step2.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

@@ -1,7 +1,123 @@
-{% extends "base.html" %}
+<!-- {% extends "base.html" %} {% block content %} -->
+<style>
+    .form {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 5rem;
+    }
 
-{% block content %}
-<h2>Dashboard</h2>
-<p>Welcome to the dashboard!</p>
-<a href="{{ url_for('logout') }}">Logout</a>
-{% endblock %}
+    .button-set {
+        width: 9rem;
+    }
+    .navbar {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .navbar-brand {
+        color: #343a40;
+        font-weight: bold;
+    }
+    .navbar-nav .nav-link {
+        color: #6c757d;
+    }
+    .btn-reset-password {
+        background-color: #ffc107;
+        color: #212529;
+        border-color: #ffc107;
+        margin-right: 10px;
+    }
+    .btn-reset-password:hover {
+        background-color: #e0a800;
+        border-color: #e0a800;
+    }
+    .btn-logout {
+        background-color: #dc3545;
+        color: #fff;
+    }
+    .btn-logout:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    .container-dashboard {
+        margin-top: 20px;
+        width: 100%;
+    }
+    .book-list {
+        list-style-type: none;
+        padding: 0;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .book-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+    }
+    .book-item:last-child {
+        border-bottom: none;
+    }
+    .book-title {
+        font-weight: bold;
+    }
+    .book-author {
+        font-style: italic;
+    }
+    .download-btn {
+        margin-top: 5px;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg">
+    <form class="form">
+        <a href="{{ url_for('reset_password') }}" class="btn btn-reset-password my-2 my-sm-0">Reset Password</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-logout my-2 my-sm-0">Logout</a>
+    </form>
+</nav>
+
+<div class="container-dashboard">
+    <h2>Welcome to the dashboard!</h2>
+
+    <section>
+        <h3>Search Books</h3>
+        <form method="post" action="{{ url_for('dashboard') }}">
+            <input type="text" name="query" placeholder="Enter book title or author" required>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </section>
+
+    <section>
+        <h3>Free Books</h3>
+        <ul class="book-list">
+            {% for book in books %}
+                <li class="book-item">
+                    <div>
+                        <div class="book-title">{{ book.volumeInfo.title }}</div>
+                        <div class="book-author">
+                            by 
+                            {% if book.volumeInfo.authors %}
+                                {{ book.volumeInfo.authors | join(', ') }}
+                            {% else %}
+                                Unknown Author
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        {% if book.accessInfo.pdf and book.accessInfo.pdf.downloadLink %}
+                            <a href="{{ book.accessInfo.pdf.downloadLink }}" class="button-set btn btn-primary download-btn" target="_blank">Download PDF</a>
+                        {% else %}
+                            <span>No download available</span>
+                        {% endif %}
+                    </div>
+                </li>
+            {% else %}
+                <li>No books available at the moment.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+<!-- {% endblock %} -->
